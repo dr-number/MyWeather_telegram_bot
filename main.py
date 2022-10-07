@@ -1,8 +1,10 @@
 from btns_constants import BTN_SETTINGS, BTN_WEATHER_TODAY, BTN_WEATHER_WEEK
 from constants import TELEGRAM_BOT_TOKEN
+from sqlite_db import Sqlite3DB
 import telebot
 from telebot import types
-from weather import get_weather
+from weather import Weather
+import logging
 
 bot = telebot.TeleBot(TELEGRAM_BOT_TOKEN)
 
@@ -27,7 +29,7 @@ def events(message):
     event = message.text
 
     if event == BTN_WEATHER_WEEK:
-        text = get_weather()
+        text = weather.get_weather_week()
     else:
         text = "<b>Пока недоступно!</b>"
 
@@ -35,6 +37,11 @@ def events(message):
 
 #logger = telebot.logger
 #telebot.logger.setLevel (logging. DEBUG )
+
+sqlite3db = Sqlite3DB()
+sqlite3db.connect_db()
+
+weather = Weather()
 
 
 print("Bot is work...")

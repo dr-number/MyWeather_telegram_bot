@@ -1,11 +1,12 @@
 version: "3.9"
    
 services:
-
   bot:
     build: .
     container_name: telegram_bot
-    command: python3 main.py
+    command:  > 
+      bash -c "/etc/init.d/redis-server restart
+      && python3 main.py"
     volumes:
       - .:/code
     ports:
@@ -13,3 +14,4 @@ services:
       - "80:80"
       - "88:88"
       - "8448:8448"
+      - "6379:6379"
