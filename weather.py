@@ -6,7 +6,7 @@ import datetime
 import traceback
 import logging
 
-__WEATHER_APP_ID = 'a252807d85f6f837bb8fe3731e12e265'
+from constants import WEATHER_APP_ID
 
 __params = {
     "ttl_cache" : 4
@@ -78,7 +78,7 @@ def get_weather(lat=55.0415, lon=82.9346, is_ajax=True):
     '''
 
         
-    url = 'https://api.openweathermap.org/data/2.5/onecall?units=metric&lat=' + lat + '&lon=' + lon + '&appid=' + __WEATHER_APP_ID
+    url = 'https://api.openweathermap.org/data/2.5/onecall?units=metric&lat=' + lat + '&lon=' + lon + '&appid=' + WEATHER_APP_ID
     received_data = ''
 
     try:

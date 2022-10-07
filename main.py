@@ -1,9 +1,8 @@
 from btns_constants import BTN_SETTINGS, BTN_WEATHER_TODAY, BTN_WEATHER_WEEK
+from constants import TELEGRAM_BOT_TOKEN
 import telebot
 from telebot import types
 from weather import get_weather
-
-TELEGRAM_BOT_TOKEN = '5655777778:AAE8eOLQ_9cMVOlfWaAlVjYI52GFFRvFY5Q'
 
 bot = telebot.TeleBot(TELEGRAM_BOT_TOKEN)
 
@@ -36,6 +35,9 @@ def events(message):
 
 #logger = telebot.logger
 #telebot.logger.setLevel (logging. DEBUG )
+
+
+print("Bot is work...")
 bot.polling(none_stop=True)
 
 
