@@ -40,7 +40,7 @@ class Weather():
         return f'weather_{prefix}_lat_{lat}_lon_{lon}'
 
 
-    def get_coordinates(self, city_name: str):
+    def get_coordinates_city(self, city_name: str):
         URL = f'{self.__URL_WEATHER}?q={city_name}&appid={WEATHER_APP_ID}'
 
         received_data = ''
@@ -48,7 +48,36 @@ class Weather():
         try:
             received_data = requests.get(URL)
         except Exception as e:
-            return 'Error get city!' + str(e)
+
+            return json.dumps({
+                "cod": 500,
+                "message": "Error get city!"
+            })
+            #return 'Error get city!' + str(e)
+
+        if(received_data.status_code != 200):
+            return json.dumps({
+                "cod": received_data.status_code,
+                "message": "Weather server not available!"
+            })
+
+        data = json.loads(received_data.text)
+        
+        if data['cod'] != 200:
+            return json.dumps({
+                "cod": data['cod'],
+                "message": "Город не найден!"
+            })
+
+        return json.dumps(
+            {
+                "cod": data['cod'],
+                "city": data['name'],
+                "country": data['sys']['country'],
+                "lon": data['coord']['lon'],
+                "lat": data['coord']['lat'],
+            })
+        
 
     def __parse_day(
         self, weather_id: int, time: datetime.date, 
