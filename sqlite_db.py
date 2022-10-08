@@ -1,6 +1,4 @@
-from re import I
 import sqlite3
-from sqlite3 import Cursor
 
 class Sqlite3DB():
 
