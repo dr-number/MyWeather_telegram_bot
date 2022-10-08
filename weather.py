@@ -69,13 +69,20 @@ class Weather():
                 "message": "Город не найден!"
             })
 
+        lon = data['coord']['lon']
+        lat = data['coord']['lat']
+        city = data['name']
+
+        message = f"Страна: <b>{data['sys']['country']}</b>\n"
+        message += f"Город: <b>{city}</b>\n"
+        message += f"<a href=\"https://yandex.ru/maps/?ll={lon},{lat}&z=12&l=map\">{city} на карте</a>\n"
+
         return json.dumps(
             {
                 "cod": data['cod'],
-                "city": data['name'],
-                "country": data['sys']['country'],
-                "lon": data['coord']['lon'],
-                "lat": data['coord']['lat'],
+                "message": message,
+                "lon": lon,
+                "lat": lat,
             })
         
 
