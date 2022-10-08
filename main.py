@@ -1,8 +1,7 @@
 import json
-import re
 from constants import TELEGRAM_BOT_TOKEN
 from markups import (
-    ACTION_NO, ACTION_YES, BTN_CANCEL, BTN_ENTER_COORDS_CITY, BTN_ENTER_NAME_CITY, BTN_SETTINGS, BTN_WEATHER_WEEK, 
+    ACTION_NO, ACTION_YES, BTN_CANCEL, BTN_ENTER_COORDS_CITY, BTN_ENTER_NAME_CITY, BTN_SETTINGS, BTN_SHOW_COORDINATES, BTN_WEATHER_WEEK, 
     get_main_buttons, get_settings_city_buttons, get_settings_city_coords,
     get_settings_city_name, get_settings_yes_no)
     
@@ -68,9 +67,18 @@ def events(message):
         markup = get_settings_city_coords()
         sub_action.set_action(event)
 
+    elif event == BTN_SHOW_COORDINATES:
+        data = sqlite3db.get_user(message.chat.id)
+
+        if not data:
+            text = "<b>Нет данных!</b>"
+        else:
+            text = weather.get_link_to_map(data["lat"], data["lon"], data.get("description", ""))
+
     elif event == BTN_CANCEL:
         text = "Выберите действие"
         sub_action.set_action('')
+        
 
     else:
         current_sub_action = sub_action.get_action()

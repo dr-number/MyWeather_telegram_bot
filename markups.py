@@ -1,6 +1,8 @@
-BTN_SETTINGS = "Настройки"
 BTN_WEATHER_TODAY = "На сегодня"
 BTN_WEATHER_WEEK = "На неделю"
+
+BTN_SETTINGS = "Настройки"
+BTN_SHOW_COORDINATES = "Где смотрим погоду"
 
 BTN_ENTER_NAME_CITY = "Ввести название"
 BTN_ENTER_COORDS_CITY = "Ввести координаты"
@@ -17,11 +19,14 @@ from telebot import types
 def get_main_buttons():
     markup = types.ReplyKeyboardMarkup(resize_keyboard=True, row_width=2)
 
-    btn_settings = types.KeyboardButton(BTN_SETTINGS)
     btn_weather_today = types.KeyboardButton(BTN_WEATHER_TODAY)
     btn_weather_in_week = types.KeyboardButton(BTN_WEATHER_WEEK)
+    btn_settings = types.KeyboardButton(BTN_SETTINGS)
+    btn_show_coordinates = types.KeyboardButton(BTN_SHOW_COORDINATES)
 
-    markup.add(btn_settings, btn_weather_today, btn_weather_in_week)
+    markup.add(
+        btn_weather_today, btn_weather_in_week,
+        btn_settings, btn_show_coordinates)
 
     return markup
 

@@ -21,6 +21,9 @@ class Weather():
 
     def __init__(self):
         self.__cache = redis.StrictRedis(host='127.0.0.1', port=6379, db=0)
+
+    def get_link_to_map(self, lat: str, lon: str, city: str = '') -> str:
+        return f"<a href=\"https://yandex.ru/maps/?ll={lon},{lat}&z=12&l=map\">{city} на карте</a>\n"
         
 
     def __prepare_number(self, number: str) -> str:
@@ -69,8 +72,8 @@ class Weather():
                 "message": "Город не найден!"
             })
 
-        lon = data['coord']['lon']
         lat = data['coord']['lat']
+        lon = data['coord']['lon']
         city = data['name']
 
         message = f"Страна: <b>{data['sys']['country']}</b>\n"
@@ -80,10 +83,10 @@ class Weather():
             {
                 "cod": data['cod'],
                 "message": message,
-                "href": f"<a href=\"https://yandex.ru/maps/?ll={lon},{lat}&z=12&l=map\">{city} на карте</a>\n",
+                "href": self.get_link_to_map(lat, lon, city),
                 "name": city,
-                "lon": lon,
                 "lat": lat,
+                "lon": lon,
             })
         
 

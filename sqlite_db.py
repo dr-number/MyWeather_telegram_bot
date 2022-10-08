@@ -11,10 +11,6 @@ class Sqlite3DB():
         self.__conn = sqlite3.connect('bot.db', check_same_thread=False)
         self.__cursor = self.__conn.cursor()
 
-    def is_exist_user(self, chat_id: int):
-        self.__cursor.execute("SELECT chat_id FROM users WHERE chat_id = ?", (chat_id,))
-        return self.__cursor.fetchone() is None
-            
 
     def create_user(self, chat_id: int):
         self.__cursor.execute("""CREATE TABLE IF NOT EXISTS users(
@@ -28,6 +24,25 @@ class Sqlite3DB():
         if self.is_exist_user(chat_id):
             self.__cursor.execute("INSERT INTO users(chat_id) VALUES(?);", (chat_id,))
             self.__conn.commit()
+
+    
+    def is_exist_user(self, chat_id: int):
+        self.__cursor.execute("SELECT chat_id FROM users WHERE chat_id = ?", (chat_id,))
+        return self.__cursor.fetchone() is None
+
+
+    def get_user(self, chat_id: int) -> set:
+        self.__cursor.execute("SELECT description, lon, lat FROM users WHERE chat_id = ?", (chat_id,))
+        data = self.__cursor.fetchone()
+
+        if data:
+            return {
+                "description": data[0],
+                "lon": data[1],
+                "lat": data[2]
+            }
+        
+        return {}
 
 
     def update_city(self, chat_id: int, lon: float, lat: float, description: str = ''):
