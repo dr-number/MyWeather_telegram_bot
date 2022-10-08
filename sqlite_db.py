@@ -11,18 +11,28 @@ class Sqlite3DB():
         self.__conn = sqlite3.connect('bot.db', check_same_thread=False)
         self.__cursor = self.__conn.cursor()
 
+    def is_exist_user(self, chat_id: int):
+        self.__cursor.execute("SELECT chat_id FROM users WHERE chat_id = ?", (chat_id,))
+        return self.__cursor.fetchone() is None
+            
+
     def create_user(self, chat_id: int):
         self.__cursor.execute("""CREATE TABLE IF NOT EXISTS users(
             id INTEGER PRIMARY KEY AUTOINCREMENT,
             chat_id INTEGER,
-            name_city TEXT default '',
+            description TEXT default '',
             lon REAL default 0.0,
             lat REAL default 0.0);
             """)
 
-        user = (str(chat_id))
+        if self.is_exist_user(chat_id):
+            self.__cursor.execute("INSERT INTO users(chat_id) VALUES(?);", (chat_id,))
+            self.__conn.commit()
 
-        self.__cursor.execute("INSERT INTO users VALUES(?);", user)
+
+    def update_city(self, chat_id: int, description: str, lon: float, lat: float):
+        self.__cursor.execute(f"UPDATE users SET description = ?, lon = ?, lat = ? WHERE chat_id= ?;", (description, lon, lat, chat_id))
         self.__conn.commit()
+
 
         

@@ -1,4 +1,5 @@
 import json
+import re
 from constants import TELEGRAM_BOT_TOKEN
 from markups import (
     ACTION_NO, ACTION_YES, BTN_CANCEL, BTN_ENTER_COORDS_CITY, BTN_ENTER_NAME_CITY, BTN_SETTINGS, BTN_WEATHER_WEEK, 
@@ -20,6 +21,15 @@ class SubAction:
 
     def get_action(self) -> str:
         return self.__action
+
+class PreSaveSettings:
+    __data = {}
+
+    def get_data(self) -> set:
+        return self.__data
+
+    def set_data(self, data: set):
+        self.__data = data
 
 
 @bot.message_handler(commands=['start'])
@@ -66,7 +76,12 @@ def events(message):
                 markup = get_settings_city_buttons()
                 sub_action.set_action('')
             else:
-                text = f"{data['message']}\n<b>Город определен верно?</b>"
+                text = f"{data['message'] + data['href']}\n<b>Город определен верно?</b>"
+                pre_save_settings.set_data({
+                    "description" : data['message'],
+                    "lon" : data['lon'],
+                    "lat" : data['lat'],
+                })
                 markup = get_settings_yes_no()
 
         else:
@@ -84,7 +99,10 @@ def callback_query(call):
     if current_sub_action == BTN_ENTER_NAME_CITY or current_sub_action == BTN_ENTER_COORDS_CITY:
 
         if call.data == ACTION_YES:
-            text = "Сохраняем настройки"
+            data = pre_save_settings.get_data()
+            sqlite3db.update_city(call.message.chat.id, data["description"], float(data["lon"]), float(data["lat"]))
+            text = "Настройки сохранены"
+
         elif call.data == ACTION_NO:
             text = "Попробуйте ещё раз"
             markup = get_settings_city_name()
@@ -101,6 +119,7 @@ sqlite3db.connect_db()
 
 sub_action = SubAction()
 weather = Weather()
+pre_save_settings = PreSaveSettings()
 
 
 print("Bot is work...")

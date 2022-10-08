@@ -75,12 +75,12 @@ class Weather():
 
         message = f"Страна: <b>{data['sys']['country']}</b>\n"
         message += f"Город: <b>{city}</b>\n"
-        message += f"<a href=\"https://yandex.ru/maps/?ll={lon},{lat}&z=12&l=map\">{city} на карте</a>\n"
 
         return json.dumps(
             {
                 "cod": data['cod'],
                 "message": message,
+                "href": f"<a href=\"https://yandex.ru/maps/?ll={lon},{lat}&z=12&l=map\">{city} на карте</a>\n",
                 "name": city,
                 "lon": lon,
                 "lat": lat,

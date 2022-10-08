@@ -15,7 +15,7 @@ ACTION_YES = "yes"
 from telebot import types
 
 def get_main_buttons():
-    markup = types.ReplyKeyboardMarkup(resize_keyboard=True, row_width=3)
+    markup = types.ReplyKeyboardMarkup(resize_keyboard=True, row_width=2)
 
     btn_settings = types.KeyboardButton(BTN_SETTINGS)
     btn_weather_today = types.KeyboardButton(BTN_WEATHER_TODAY)
