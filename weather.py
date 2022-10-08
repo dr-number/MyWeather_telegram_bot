@@ -81,6 +81,7 @@ class Weather():
             {
                 "cod": data['cod'],
                 "message": message,
+                "name": city,
                 "lon": lon,
                 "lat": lat,
             })

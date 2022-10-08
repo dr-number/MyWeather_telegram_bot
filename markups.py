@@ -6,6 +6,11 @@ BTN_ENTER_NAME_CITY = "Ввести название"
 BTN_ENTER_COORDS_CITY = "Ввести координаты"
 
 BTN_CANCEL = "Отмена"
+BTN_YES = "Да"
+BTN_NO = "Нет"
+
+ACTION_NO = "no"
+ACTION_YES = "yes"
 
 from telebot import types
 
@@ -48,5 +53,14 @@ def get_settings_city_coords():
     btn_cancel = types.KeyboardButton(BTN_CANCEL)
 
     markup.add(btn_name, btn_cancel)
+    return markup
 
+def get_settings_yes_no():
+    markup = types.InlineKeyboardMarkup()
+    markup.row_width = 2
+
+    btn_yes = types.InlineKeyboardButton(BTN_YES, callback_data=ACTION_YES)
+    btn_no = types.InlineKeyboardButton(BTN_NO, callback_data=ACTION_NO)
+
+    markup.add(btn_yes, btn_no)
     return markup

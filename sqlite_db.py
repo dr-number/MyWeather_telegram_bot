@@ -8,15 +8,21 @@ class Sqlite3DB():
     __cursor = None
 
     def connect_db(self):
-        self.__conn = sqlite3.connect('bot.db')
+        self.__conn = sqlite3.connect('bot.db', check_same_thread=False)
         self.__cursor = self.__conn.cursor()
 
     def create_user(self, chat_id: int):
         self.__cursor.execute("""CREATE TABLE IF NOT EXISTS users(
-            id INT PRIMARY KEY,
-            chat_id int);
+            id INTEGER PRIMARY KEY AUTOINCREMENT,
+            chat_id INTEGER,
+            name_city TEXT default '',
+            lon REAL default 0.0,
+            lat REAL default 0.0);
             """)
 
-        user = ('00002', 'Lois', 'Lane', 'Female')
+        user = (str(chat_id))
+
+        self.__cursor.execute("INSERT INTO users VALUES(?);", user)
+        self.__conn.commit()
 
         
