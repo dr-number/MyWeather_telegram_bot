@@ -1,2 +1,4 @@
-TELEGRAM_BOT_TOKEN = '5655777778:AAE8eOLQ_9cMVOlfWaAlVjYI52GFFRvFY5Q'
-WEATHER_APP_ID = 'a252807d85f6f837bb8fe3731e12e265'
+from decouple import config
+
+TELEGRAM_BOT_TOKEN = config('telegram_bot_token',default='')
+WEATHER_APP_ID = config('weather_app_id',default='')
