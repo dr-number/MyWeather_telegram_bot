@@ -31,6 +31,13 @@ class PreSaveSettings:
     def set_data(self, data: set):
         self.__data = data
 
+    def is_float(self, s: str) -> bool:
+        try:
+            float(s)
+            return True
+        except ValueError:
+            return False
+
 
 @bot.message_handler(commands=['start'])
 def start(message):
@@ -57,7 +64,7 @@ def events(message):
         sub_action.set_action(event)
 
     elif event == BTN_ENTER_COORDS_CITY:
-        text = "Введите координаты города"
+        text = "Введите координаты города (в формате <b>широта-долгота</b>)"
         markup = get_settings_city_coords()
         sub_action.set_action(event)
 
@@ -84,6 +91,26 @@ def events(message):
                 })
                 markup = get_settings_yes_no()
 
+        elif current_sub_action == BTN_ENTER_COORDS_CITY:
+            
+            try:
+                data = event.replace(".", ",").split("-")
+
+                if pre_save_settings.is_float(data[0]) or pre_save_settings.is_float(data[1]):
+                    text = "<b>Можно вводить только целые или дробные числа!</b>"
+                    markup = get_settings_city_coords()
+                else:
+                    text = f"Широта: <b>{data[0]}</b>\nДолгота: <b>{data[1]}</b>\n<b>Верно?</b>"
+                    pre_save_settings.set_data({
+                        "lat" : data[0].replace(",", "."),
+                        "lon" : data[1].replace(",", "."),
+                    })
+                    markup = get_settings_yes_no()
+
+            except Exception as e:
+                text = "<b>Некорректные данные!</b>"
+                markup = get_settings_city_coords()
+
         else:
             text = "<b>Пока недоступно!</b>"
         
@@ -100,12 +127,17 @@ def callback_query(call):
 
         if call.data == ACTION_YES:
             data = pre_save_settings.get_data()
-            sqlite3db.update_city(call.message.chat.id, data["description"], float(data["lon"]), float(data["lat"]))
+            sqlite3db.update_city(call.message.chat.id, float(data["lon"]), float(data["lat"]), data.get("description", ""))
             text = "Настройки сохранены"
 
         elif call.data == ACTION_NO:
             text = "Попробуйте ещё раз"
-            markup = get_settings_city_name()
+
+            if current_sub_action == BTN_ENTER_NAME_CITY:
+                markup = get_settings_city_name()
+            else:
+                markup = get_settings_city_coords()
+
             sub_action.set_action(current_sub_action)
 
     bot.send_message(call.message.chat.id, text, reply_markup=markup, parse_mode="html")

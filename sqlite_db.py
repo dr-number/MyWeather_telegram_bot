@@ -30,7 +30,7 @@ class Sqlite3DB():
             self.__conn.commit()
 
 
-    def update_city(self, chat_id: int, description: str, lon: float, lat: float):
+    def update_city(self, chat_id: int, lon: float, lat: float, description: str = ''):
         self.__cursor.execute(f"UPDATE users SET description = ?, lon = ?, lat = ? WHERE chat_id= ?;", (description, lon, lat, chat_id))
         self.__conn.commit()
 
