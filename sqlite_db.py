@@ -30,6 +30,7 @@ class Sqlite3DB():
 
 
     def get_user(self, chat_id: int) -> set:
+
         self.__cursor.execute("SELECT description, lon, lat FROM users WHERE chat_id = ?", (chat_id,))
         data = self.__cursor.fetchone()
 
@@ -42,6 +43,12 @@ class Sqlite3DB():
         
         return {}
 
+    def get_title(self, data_user: set) -> str:
+
+        if data_user["description"]:
+            return data_user["description"]
+
+        return f"Ширина: <b>{data_user['lat']}</b> Долгота: <b>{data_user['lon']}</b>\n"
 
     def update_city(self, chat_id: int, lon: float, lat: float, description: str = ''):
         self.__cursor.execute(f"UPDATE users SET description = ?, lon = ?, lat = ? WHERE chat_id= ?;", (description, lon, lat, chat_id))

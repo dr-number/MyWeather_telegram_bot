@@ -104,7 +104,7 @@ class Weather():
 
         return str_result
 
-    def get_weather_week(self, lat=55.0415, lon=82.9346):
+    def get_weather_week(self, lat: float, lon: float) -> str:
 
         lat = str(lat)
         lon = str(lon)

@@ -50,8 +50,9 @@ def events(message):
     markup = get_main_buttons()
 
     if event == BTN_WEATHER_WEEK:
-        text = weather.get_weather_week()
-        markup = get_main_buttons()
+        data = sqlite3db.get_user(message.chat.id)
+        text = sqlite3db.get_title(data) + "\n"
+        text += weather.get_weather_week(float(data["lat"]), float(data["lon"]))
 
     elif event == BTN_SETTINGS:
         text = "Укажите город"
