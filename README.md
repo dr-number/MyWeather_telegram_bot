@@ -1,4 +1,4 @@
-# Telegram bot on Python MyWeather (with redis, sqlite3)
+# Telegram bot on Python "MyWeather" (with redis, sqlite3)
 
 ## How to use
 
