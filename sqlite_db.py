@@ -29,10 +29,17 @@ class Sqlite3DB():
         return self.__cursor.fetchone() is None
 
 
+    def __get_user(self, chat_id: int):
+        self.__cursor.execute("SELECT description, lon, lat FROM users WHERE chat_id = ?", (chat_id,))
+        return self.__cursor.fetchone()
+
+    def is_correct_coord(self, chat_id: int) -> bool:
+        data = self.__get_user(chat_id)
+        return data[2] != 0.0 or data[1] != 0.0
+
     def get_user(self, chat_id: int) -> set:
 
-        self.__cursor.execute("SELECT description, lon, lat FROM users WHERE chat_id = ?", (chat_id,))
-        data = self.__cursor.fetchone()
+        data = self.__get_user(chat_id)
 
         if data:
             return {

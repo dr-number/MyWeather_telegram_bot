@@ -40,19 +40,24 @@ class PreSaveSettings:
 
 @bot.message_handler(commands=['start'])
 def start(message):
-   bot.send_message(message.chat.id, f"<b>Hello {message.from_user.first_name}!</b>", parse_mode="html", reply_markup=get_main_buttons())
    sqlite3db.create_user(message.chat.id)
+
+   text = f"<b>Hello {message.from_user.first_name}!</b>"
+   markup = get_main_buttons(sqlite3db.is_correct_coord(message.chat.id))
+
+   bot.send_message(message.chat.id, text, parse_mode="html", reply_markup=markup)
 
 @bot.message_handler(content_types=['text'])
 def events(message):
 
     event = message.text
-    markup = get_main_buttons()
+
+    markup = get_main_buttons(sqlite3db.is_correct_coord(message.chat.id))
 
     if event == BTN_WEATHER_WEEK:
-        data = sqlite3db.get_user(message.chat.id)
-        text = sqlite3db.get_title(data) + "\n"
-        text += weather.get_weather_week(float(data["lat"]), float(data["lon"]))
+        data_user = sqlite3db.get_user(message.chat.id)
+        text = sqlite3db.get_title(data_user) + "\n"
+        text += weather.get_weather_week(float(data_user["lat"]), float(data_user["lon"]))
 
     elif event == BTN_SETTINGS:
         text = "Укажите город"
@@ -105,7 +110,7 @@ def events(message):
             try:
                 data = event.replace(".", ",").split("-")
 
-                if pre_save_settings.is_float(data[0]) or pre_save_settings.is_float(data[1]):
+                if not pre_save_settings.is_float(data[0]) or not pre_save_settings.is_float(data[1]):
                     text = "<b>Можно вводить только целые или дробные числа!</b>"
                     markup = get_settings_city_coords()
                 else:
@@ -129,7 +134,7 @@ def events(message):
 @bot.callback_query_handler(func=lambda call: True)
 def callback_query(call):
 
-    markup = get_main_buttons()
+    markup = get_main_buttons(sqlite3db.is_correct_coord(call.message.chat.id))
     current_sub_action = sub_action.get_action()
 
     if current_sub_action == BTN_ENTER_NAME_CITY or current_sub_action == BTN_ENTER_COORDS_CITY:
@@ -137,6 +142,9 @@ def callback_query(call):
         if call.data == ACTION_YES:
             data = pre_save_settings.get_data()
             sqlite3db.update_city(call.message.chat.id, float(data["lon"]), float(data["lat"]), data.get("description", ""))
+            
+            is_correct_coordinates = data["lon"] != "0.0" and data["lat"] != "0.0"
+            markup = get_main_buttons(is_correct_coordinates)
             text = "Настройки сохранены"
 
         elif call.data == ACTION_NO:

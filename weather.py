@@ -58,6 +58,12 @@ class Weather():
             })
             #return 'Error get city!' + str(e)
 
+        if(received_data.status_code == 404):
+            return json.dumps({
+                "cod": "404",
+                "message": "Город не найден!"
+            })
+
         if(received_data.status_code != 200):
             return json.dumps({
                 "cod": received_data.status_code,
@@ -65,12 +71,6 @@ class Weather():
             })
 
         data = json.loads(received_data.text)
-        
-        if data['cod'] != 200:
-            return json.dumps({
-                "cod": data['cod'],
-                "message": "Город не найден!"
-            })
 
         lat = data['coord']['lat']
         lon = data['coord']['lon']

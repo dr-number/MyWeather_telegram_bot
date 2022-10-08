@@ -16,7 +16,7 @@ ACTION_YES = "yes"
 
 from telebot import types
 
-def get_main_buttons():
+def get_main_buttons(is_correct_coordinates: bool):
     markup = types.ReplyKeyboardMarkup(resize_keyboard=True, row_width=2)
 
     btn_weather_today = types.KeyboardButton(BTN_WEATHER_TODAY)
@@ -24,9 +24,12 @@ def get_main_buttons():
     btn_settings = types.KeyboardButton(BTN_SETTINGS)
     btn_show_coordinates = types.KeyboardButton(BTN_SHOW_COORDINATES)
 
-    markup.add(
-        btn_weather_today, btn_weather_in_week,
-        btn_settings, btn_show_coordinates)
+    if is_correct_coordinates:
+        markup.add(
+            btn_weather_today, btn_weather_in_week,
+            btn_settings, btn_show_coordinates)
+    else:
+        markup.add(btn_settings)
 
     return markup
 
