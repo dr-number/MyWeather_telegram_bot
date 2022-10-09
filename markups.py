@@ -15,6 +15,7 @@ ACTION_NO = "no"
 ACTION_YES = "yes"
 
 from telebot import types
+from weather import CITY_MOSСOW, CITY_SAINT_PETERBURG, CITY_NOVOSIBIRSK
 
 def get_main_buttons(is_correct_coordinates: bool):
     markup = types.ReplyKeyboardMarkup(resize_keyboard=True, row_width=2)
@@ -33,6 +34,15 @@ def get_main_buttons(is_correct_coordinates: bool):
 
     return markup
 
+def __install_city_buttons(markup):
+    markup.add(
+        types.KeyboardButton(CITY_MOSСOW),
+        types.KeyboardButton(CITY_SAINT_PETERBURG),
+        types.KeyboardButton(CITY_NOVOSIBIRSK)
+    )
+
+    return markup
+
 def get_settings_city_buttons():
     markup = types.ReplyKeyboardMarkup(resize_keyboard=True, row_width=3)
 
@@ -45,22 +55,24 @@ def get_settings_city_buttons():
     return markup
 
 def get_settings_city_name():
-    markup = types.ReplyKeyboardMarkup(resize_keyboard=True, row_width=2)
 
     btn_coords = types.KeyboardButton(BTN_ENTER_COORDS_CITY)
     btn_cancel = types.KeyboardButton(BTN_CANCEL)
 
+    markup = types.ReplyKeyboardMarkup(resize_keyboard=True, row_width=2)
+    markup =__install_city_buttons(markup)
     markup.add(btn_coords, btn_cancel)
 
     return markup
 
 def get_settings_city_coords():
-    markup = types.ReplyKeyboardMarkup(resize_keyboard=True, row_width=2)
-
+    
     btn_name = types.KeyboardButton(BTN_ENTER_NAME_CITY)
     btn_cancel = types.KeyboardButton(BTN_CANCEL)
 
+    markup = types.ReplyKeyboardMarkup(resize_keyboard=True, row_width=2)
     markup.add(btn_name, btn_cancel)
+
     return markup
 
 def get_settings_yes_no():

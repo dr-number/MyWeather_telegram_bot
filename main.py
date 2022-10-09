@@ -1,7 +1,11 @@
 import json
 from constants import TELEGRAM_BOT_TOKEN
+from weather import CITY_MOSСOW, CITY_SAINT_PETERBURG, CITY_NOVOSIBIRSK
+
 from markups import (
-    ACTION_NO, ACTION_YES, BTN_CANCEL, BTN_ENTER_COORDS_CITY, BTN_ENTER_NAME_CITY, BTN_SETTINGS, BTN_SHOW_COORDINATES, BTN_WEATHER_WEEK, 
+    ACTION_NO, ACTION_YES, BTN_CANCEL, BTN_ENTER_COORDS_CITY, 
+    BTN_ENTER_NAME_CITY, BTN_SETTINGS, BTN_SHOW_COORDINATES, 
+    BTN_WEATHER_TODAY, BTN_WEATHER_WEEK, 
     get_main_buttons, get_settings_city_buttons, get_settings_city_coords,
     get_settings_city_name, get_settings_yes_no)
     
@@ -59,6 +63,11 @@ def events(message):
         text = sqlite3db.get_title(data_user) + "\n"
         text += weather.get_weather_week(float(data_user["lat"]), float(data_user["lon"]))
 
+    elif event == BTN_WEATHER_TODAY:
+        data_user = sqlite3db.get_user(message.chat.id)
+        text = sqlite3db.get_title(data_user) + "\n"
+        text += weather.get_weather_day(float(data_user["lat"]), float(data_user["lon"]))
+
     elif event == BTN_SETTINGS:
         text = "Укажите город"
         markup = get_settings_city_buttons()
@@ -90,6 +99,18 @@ def events(message):
         current_sub_action = sub_action.get_action()
 
         if current_sub_action == BTN_ENTER_NAME_CITY:
+
+            if event == CITY_MOSСOW or event == CITY_SAINT_PETERBURG or event == CITY_NOVOSIBIRSK:
+
+                description = weather.get_country_info("Россия", event)
+                data = weather.get_coordinates(event)
+               
+                sqlite3db.update_city(message.chat.id, data["lon"], data["lat"], description)
+                markup = get_main_buttons(True)
+
+                bot.send_message(message.chat.id, "Настройки сохранены", reply_markup=markup, parse_mode="html")
+                return
+
             data = json.loads(weather.get_coordinates_city(event))
 
             if data['cod'] != 200:
