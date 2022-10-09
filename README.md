@@ -24,3 +24,32 @@ And run composition
       <img src="https://github.com/dr-number/MyWeather_telegram_bot/blob/master/z_for_read_me/weather.png">
    </p>
 </figure>
+
+**Setting location**
+
+- Choice of cities: Moscow, St. Petersburg, Novosibirsk.
+<figure>
+   <p align="center">
+      <img src="https://github.com/dr-number/MyWeather_telegram_bot/blob/master/z_for_read_me/settings.png">
+   </p>
+</figure>
+
+<figure>
+   <p align="center">
+      <img src="https://github.com/dr-number/MyWeather_telegram_bot/blob/master/z_for_read_me/set-sity-name.png">
+   </p>
+</figure>
+
+- Manual city entry
+<figure>
+   <p align="center">
+      <img src="https://github.com/dr-number/MyWeather_telegram_bot/blob/master/z_for_read_me/set-sity-name-2.png">
+   </p>
+</figure>
+
+- Weather in the specified coordinates
+<figure>
+   <p align="center">
+      <img src="https://github.com/dr-number/MyWeather_telegram_bot/blob/master/z_for_read_me/set-sity-coord.png">
+   </p>
+</figure>
