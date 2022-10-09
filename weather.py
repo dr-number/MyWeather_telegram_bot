@@ -66,7 +66,7 @@ class Weather():
 
     def get_coordinates_city(self, city_name: str):
 
-        city_name = city_name.strip().capitalize()
+        city_name = city_name.strip().lower().capitalize()
         URL = f'{self.__URL_WEATHER}?q={city_name}&lang=ru&appid={WEATHER_APP_ID}'
 
         received_data = ''
@@ -79,8 +79,7 @@ class Weather():
                 "cod": 500,
                 "message": "Error get city!"
             })
-            #return 'Error get city!' + str(e)
-
+           
         if(received_data.status_code == 404):
             return json.dumps({
                 "cod": "404",
