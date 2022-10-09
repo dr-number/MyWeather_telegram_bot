@@ -147,7 +147,7 @@ def events(message):
                 markup = get_settings_city_coords()
 
         else:
-            text = "<b>Пока недоступно!</b>"
+            text = "<b>Не понял команду...</b>"
         
 
     bot.send_message(message.chat.id, text, reply_markup=markup, parse_mode="html")
