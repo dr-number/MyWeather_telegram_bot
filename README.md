@@ -16,7 +16,7 @@ And run composition
 
     docker-compose up -d
 
-## P
+## Screenshots
 
 **Weather forecast for the week or day**
 <figure>
