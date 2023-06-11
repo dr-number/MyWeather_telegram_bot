@@ -1,5 +1,12 @@
 # Telegram bot on Python "MyWeather" (with redis, sqlite3)
 
+# Виртуальное окружение Python (venv)
+
+   <a href="https://pythonchik.ru/okruzhenie-i-pakety/virtualnoe-okruzhenie-python-venv">Работа с виртуальным кружением</a>
+
+# Установка
+   pip install -r requirements.txt
+
 ## How to use
 
 - Rename file in root project **test.env** to **.env** and paste:
